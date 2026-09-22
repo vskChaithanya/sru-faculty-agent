@@ -24,7 +24,7 @@ app.add_middleware(
 
 # 1. Connect to Cloud Embeddings (Swapped to Gemini)
 embeddings = GoogleGenerativeAIEmbeddings(
-    model="models/text-embedding-004", 
+    model="models/text-embedding-005", 
     google_api_key=os.environ["GEMINI_API_KEY"]
 )
 
