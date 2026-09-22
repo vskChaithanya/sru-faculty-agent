@@ -1,8 +1,6 @@
 fastapi
 uvicorn
-langchain-groq
-langchain-chroma
-langchain-huggingface
-pydantic
 python-dotenv
-sentence-transformers
+pydantic
+langchain-core
+langchain-openai
