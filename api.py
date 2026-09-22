@@ -7,7 +7,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_groq import ChatGroq
-from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 
 load_dotenv()
@@ -22,10 +22,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 1. Connect to Cloud Embeddings
-embeddings = HuggingFaceInferenceAPIEmbeddings(
-    api_key=os.environ["HF_TOKEN"],
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+# 1. Connect to Cloud Embeddings (Swapped to Gemini)
+embeddings = GoogleGenerativeAIEmbeddings(
+    model="models/text-embedding-004", 
+    google_api_key=os.environ["GEMINI_API_KEY"]
 )
 
 # 2. Connect to Pinecone Cloud DB
