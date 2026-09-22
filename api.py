@@ -5,7 +5,10 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
 from langchain_groq import ChatGroq
+from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
+from langchain_pinecone import PineconeVectorStore
 
 load_dotenv()
 
@@ -19,15 +22,42 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize Groq with Mixtral (Free Tier)
-llm = ChatGroq(model="openai/gpt-oss-20b", temperature=0.3)
+# 1. Connect to Cloud Embeddings
+embeddings = HuggingFaceInferenceAPIEmbeddings(
+    api_key=os.environ["HF_TOKEN"],
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+)
 
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are an administrative assistant for SR University faculty. Answer questions accurately based on standard SR University faculty guidelines. Keep answers professional, direct, and conversational."),
-    ("human", "{input}"),
-])
+# 2. Connect to Pinecone Cloud DB
+vectorstore = PineconeVectorStore(index_name="sru-handbook", embedding=embeddings)
+retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
-chain = prompt | llm | StrOutputParser()
+# 3. Connect to Groq LLM
+llm = ChatGroq(model="openai/gpt-oss-20b", temperature=0.2)
+
+# 4. Strict Handbook Prompt
+template = """You are the official SR University Faculty Assistant.
+Answer the user's question using ONLY the provided context from the SRU Faculty Handbook.
+If the answer is not in the context, say "This policy is not explicitly covered in the handbook."
+Keep answers concise and use bullet points.
+
+Context:
+{context}
+
+Question: {question}
+"""
+prompt = ChatPromptTemplate.from_template(template)
+
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
+
+# 5. Build RAG Chain
+rag_chain = (
+    {"context": retriever | format_docs, "question": RunnablePassthrough()}
+    | prompt
+    | llm
+    | StrOutputParser()
+)
 
 class ChatRequest(BaseModel):
     message: str
@@ -35,8 +65,8 @@ class ChatRequest(BaseModel):
 @app.post("/chat")
 async def chat_endpoint(req: ChatRequest):
     try:
-        response_text = chain.invoke({"input": req.message})
+        response_text = rag_chain.invoke(req.message)
         return {"reply": response_text}
     except Exception as e:
         print(f"Error: {str(e)}")
-        return {"reply": "An error occurred while communicating with the AI model."}
+        return {"reply": "An error occurred while searching the handbook."}
