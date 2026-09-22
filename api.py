@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 
 load_dotenv()
 
@@ -19,8 +19,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize OpenAI model
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
+# Initialize Groq with Mixtral (Free Tier)
+llm = ChatGroq(model="mixtral-8x7b-32768", temperature=0.3)
 
 prompt = ChatPromptTemplate.from_messages([
     ("system", "You are an administrative assistant for SR University faculty. Answer questions accurately based on standard SR University faculty guidelines. Keep answers professional, direct, and conversational."),

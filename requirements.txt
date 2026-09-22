@@ -3,4 +3,4 @@ uvicorn
 python-dotenv
 pydantic
 langchain-core
-langchain-openai
+langchain-groq
