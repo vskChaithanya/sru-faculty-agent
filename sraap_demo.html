@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SR University</title>
+    <link rel="icon" href="https://sraap.in/index_files/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./sraap_demo_files/bootstrap.min.css">
+    <link rel="stylesheet" href="./sraap_demo_files/style.css">
+    <link rel="stylesheet" href="./sraap_demo_files/all.min.css">
+    <!-- Font Awesome for the eye icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="container-fluid" id="header_section">
+            <div class="container">
+                <nav class="nav-bar">
+                    <div class="container d-flex justify-content-between align-items-center">
+                        <a class="navbar-brand" href="#"><img class="logo" src="./sraap_demo_files/SRU_white.png" alt="SRU logo"></a>
+                        <ul class="nav-menu">
+                            <li class="nav-item" style="box-shadow: 0 0 10px rgba(210, 208, 226, 0.43); border-radius:8px; white-space: nowrap;">
+                                <a class="nav-link" href="#">STAFF</a>
+                            </li>
+                            <li class="nav-item" style="box-shadow: 0 0 10px rgba(210, 208, 226, 0.43); border-radius:8px; white-space: nowrap;">
+                                <a class="nav-link" href="#">STUDENT</a>
+                            </li>
+                            <li class="nav-item" style="box-shadow: 0 0 10px rgba(210, 208, 226, 0.43); border-radius: 8px; white-space: nowrap;">
+                                <a class="nav-link" href="#">PARENT</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="row align-items-center" hero="">
+                <div class="col-lg-4 col-md-4">
+                    <div class="card" id="login-card">
+                        <div class="card-body">
+                            <div class="form_heading text-center mb-4">
+                                <h4>Staff Login</h4>
+                            </div>
+                            <form id="login-form">
+                                <div class="mb-3">
+                                    <label for="uname">User Name</label>
+                                    <input type="text" class="form-control" id="user_id" name="user_id" placeholder="Enter User Name" required="">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="user_password" name="user_password" placeholder="Enter Password" required="">
+                                        <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
+                                            <i class="fas fa-eye" id="toggleIcon"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary w-100">Sign in</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="container mt-5">
+                        <img src="./sraap_demo_files/NIRF_BANNER_2025.jpg" class="d-block w-100" alt="Banner">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <footer class="mt-1">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-12 text-center">
+                    <p>© 2026, SR University. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- START OF SRU CHATBOT WIDGET -->
+    <div id="sru-chatbot" style="display:none; position:fixed; bottom:80px; right:20px; width:350px; height:500px; background:white; border-radius:10px; box-shadow:0px 5px 15px rgba(0,0,0,0.2); z-index:9999; display:flex; flex-direction:column; overflow:hidden;">
+        <!-- Header -->
+        <div style="background:#1a365d; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:bold; font-family:sans-serif;">SRU Agentic AI Assistant</span>
+            <button onclick="toggleChat()" style="background:none; border:none; color:white; cursor:pointer; font-size:16px;">✖</button>
+        </div>
+        
+        <!-- Messages Area -->
+        <div id="chat-messages" style="flex:1; padding:15px; overflow-y:auto; font-family:sans-serif; font-size:14px; background:#f4f6f9;">
+            <div style="background:#e2e8f0; color:black; padding:10px; border-radius:10px; margin-bottom:10px; width:fit-content;">
+                Hello! I am the SRU Faculty Assistant. Ask me anything about the handbook.
+            </div>
+        </div>
+        
+        <!-- Input Area -->
+        <div style="padding:15px; border-top:1px solid #ddd; background:white; display:flex; gap:10px;">
+            <input type="text" id="chat-input" placeholder="Type a message..." style="flex:1; padding:10px; border:1px solid #ccc; border-radius:20px; outline:none; font-family:sans-serif;" onkeypress="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()" style="background:#1a365d; color:white; border:none; padding:10px 15px; border-radius:50%; cursor:pointer;">➤</button>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button onclick="toggleChat()" style="position:fixed; bottom:20px; right:20px; width:60px; height:60px; background:#1a365d; color:white; border:none; border-radius:50%; box-shadow:0px 4px 10px rgba(0,0,0,0.3); cursor:pointer; z-index:10000; font-size:24px; display:flex; justify-content:center; align-items:center;">
+        🤖
+    </button>
+
+    <!-- Import Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Chatbot Logic -->
+    <script>
+        function toggleChat() {
+            const chat = document.getElementById("sru-chatbot");
+            chat.style.display = chat.style.display === "none" ? "flex" : "none";
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById("chat-input");
+            const messageText = input.value.trim();
+            if (!messageText) return;
+
+            const msgContainer = document.getElementById("chat-messages");
+
+            // Add User Message
+            msgContainer.innerHTML += `<div style="background:#1a365d; color:white; padding:10px; border-radius:10px; margin-bottom:10px; margin-left:auto; width:fit-content; max-width:80%; font-family:sans-serif;">${messageText}</div>`;
+            input.value = "";
+            
+            // Add Loading Indicator
+            const loaderId = "loader-" + Date.now();
+            msgContainer.innerHTML += `<div id="${loaderId}" style="color:gray; font-size:12px; margin-bottom:10px; font-family:sans-serif;">Thinking...</div>`;
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+
+            try {
+                // Call the local FastAPI server
+                const response = await fetch("http://localhost:8000/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: messageText })
+                });
+                
+                const data = await response.json();
+
+                // Remove loader
+                document.getElementById(loaderId).remove();
+                
+                // Parse markdown into HTML
+                const formattedReply = marked.parse(data.reply);
+                
+                // Add AI response
+                msgContainer.innerHTML += `
+                    <div style="background:#e2e8f0; color:black; padding:10px 15px; border-radius:10px; margin-bottom:10px; width:fit-content; max-width:85%; font-family:sans-serif; line-height:1.4;">
+                        ${formattedReply}
+                    </div>`;
+                
+            } catch (error) {
+                document.getElementById(loaderId).remove();
+                msgContainer.innerHTML += `<div style="color:red; font-size:12px; margin-bottom:10px; font-family:sans-serif;">Error connecting to server. Is the Python API running?</div>`;
+            }
+            
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById("user_password");
+            const toggleIcon = document.getElementById("toggleIcon");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+@font-face {
+    font-family: 'Centrale Sans';
+    src: url('CentraleSansLightItalic.woff2') format('woff2'),
+        url('CentraleSansLightItalic.woff') format('woff'),
+        url('CentraleSansLightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centrale Sans MediumMedium';
+    src: url('CentraleSans-MediumItalic.woff2') format('woff2'),
+        url('CentraleSans-MediumItalic.woff') format('woff'),
+        url('CentraleSans-MediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centrale Sans XLight';
+    src: url('CentraleSans-XLightItalic.woff2') format('woff2'),
+        url('CentraleSans-XLightItalic.woff') format('woff'),
+        url('CentraleSans-XLightItalic.ttf') format('truetype');
+    font-weight: 200;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centrale Sans';
+    src: url('CentraleSans-Bold.woff2') format('woff2'),
+        url('CentraleSans-Bold.woff') format('woff'),
+        url('CentraleSans-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centrale Sans';
+    src: url('CentraleSans-BoldItalic.woff2') format('woff2'),
+        url('CentraleSans-BoldItalic.woff') format('woff'),
+        url('CentraleSans-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centrale Sans XThin';
+    src: url('CentraleSans-XThin.woff2') format('woff2'),
+        url('CentraleSans-XThin.woff') format('woff'),
+        url('CentraleSans-XThin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centrale Sans XLight';
+    src: url('CentraleSans-XLight.woff2') format('woff2'),
+        url('CentraleSans-XLight.woff') format('woff'),
+        url('CentraleSans-XLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centrale Sans';
+    src: url('CentraleSans-Light.woff2') format('woff2'),
+        url('CentraleSans-Light.woff') format('woff'),
+        url('CentraleSans-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centrale Sans';
+    src: url('CentraleSans-Medium.woff2') format('woff2'),
+        url('CentraleSans-Medium.woff') format('woff'),
+        url('CentraleSans-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centrale Sans XThin';
+    src: url('CentraleSans-XThinItalic.woff2') format('woff2'),
+        url('CentraleSans-XThinItalic.woff') format('woff'),
+        url('CentraleSans-XThinItalic.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centrale Sans';
+    src: url('CentraleSansRegular.woff2') format('woff2'),
+        url('CentraleSansRegular.woff') format('woff'),
+        url('CentraleSansRegular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centrale Sans';
+    src: url('CentraleSans-Thin.woff2') format('woff2'),
+        url('CentraleSans-Thin.woff') format('woff'),
+        url('CentraleSans-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centrale Sans';
+    src: url('CentraleSansThinItalic.woff2') format('woff2'),
+        url('CentraleSansThinItalic.woff') format('woff'),
+        url('CentraleSansThinItalic.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Centrale Sans';
+    src: url('CentraleSansRegularItalic.woff2') format('woff2'),
+        url('CentraleSansRegularItalic.woff') format('woff'),
+        url('CentraleSansRegularItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
