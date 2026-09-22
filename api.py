@@ -20,7 +20,7 @@ app.add_middleware(
 )
 
 # Initialize Groq with Mixtral (Free Tier)
-llm = ChatGroq(model="mixtral-8x7b-32768", temperature=0.3)
+llm = ChatGroq(model="openai/gpt-oss-20b", temperature=0.3)
 
 prompt = ChatPromptTemplate.from_messages([
     ("system", "You are an administrative assistant for SR University faculty. Answer questions accurately based on standard SR University faculty guidelines. Keep answers professional, direct, and conversational."),
