@@ -20,7 +20,7 @@ app.add_middleware(
 )
 
 # Initialize Groq LLM
-llm = ChatGroq(model="llama3-8b-8192", temperature=0.3)
+llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.3)
 
 prompt = ChatPromptTemplate.from_messages([
     ("system", "You are an administrative assistant for SR University faculty. Answer questions accurately based on standard SR University faculty guidelines. Keep answers professional, direct, and conversational."),
