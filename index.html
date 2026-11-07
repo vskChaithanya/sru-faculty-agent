@@ -191,7 +191,30 @@
     navigator.serviceWorker.register('sw.js')
       .then(() => console.log("Service Worker Registered"));
   }
-  <button id="installBtn" style="display: none; padding: 10px 20px; background-color: #0056b3; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">📲 Install Mobile App</button>
+  
+</script>
+<script>
+  let deferredPrompt;
+  const installBtn = document.getElementById('installBtn');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent Chrome's default pop-up
+    e.preventDefault();
+    deferredPrompt = e;
+    // Show our custom button
+    installBtn.style.display = 'block';
+  });
+
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt(); // Show the install prompt
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        installBtn.style.display = 'none'; // Hide button after install
+      }
+      deferredPrompt = null;
+    }
+  });
 </script>
 </body>
 </html>
