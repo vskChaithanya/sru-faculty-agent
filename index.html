@@ -4,23 +4,26 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SR University</title>
+    
+    <!-- Icons and CSS -->
     <link rel="icon" href="https://sraap.in/index_files/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./sraap_demo_files/bootstrap.min.css">
     <link rel="stylesheet" href="./sraap_demo_files/style.css">
     <link rel="stylesheet" href="./sraap_demo_files/all.min.css">
-    <link rel="manifest" href="manifest.json">
     <!-- Font Awesome for the eye icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-<!-- Android / Standard PWA -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ffffff">
 
-<!-- Apple iOS / Safari Requirements -->
-<link rel="apple-touch-icon" href="sru-logo.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="SRU Assistant">
+    <!-- Android / Standard PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Apple iOS / Safari Requirements -->
+    <link rel="apple-touch-icon" href="sru-logo.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="SRU Assistant">
+</head>
+
 <body>
     <header>
         <div class="container-fluid" id="header_section">
@@ -49,6 +52,8 @@
                         <div class="card-body">
                             <div class="form_heading text-center mb-4">
                                 <h4>Staff Login</h4>
+                                <!-- PRO INSTALL BUTTON PLACED HERE -->
+                                <button id="installBtn" style="display: none; width: 100%; margin-top: 15px; padding: 10px 20px; background-color: #0056b3; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">📲 Install Mobile App</button>
                             </div>
                             <form id="login-form">
                                 <div class="mb-3">
@@ -186,35 +191,38 @@
             }
         }
     </script>
+
+    <!-- PWA Service Worker & Install Button Logic -->
     <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-      .then(() => console.log("Service Worker Registered"));
-  }
-  
-</script>
-<script>
-  let deferredPrompt;
-  const installBtn = document.getElementById('installBtn');
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent Chrome's default pop-up
-    e.preventDefault();
-    deferredPrompt = e;
-    // Show our custom button
-    installBtn.style.display = 'block';
-  });
-
-  installBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt(); // Show the install prompt
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        installBtn.style.display = 'none'; // Hide button after install
+      // Register Service Worker
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+          .then(() => console.log("Service Worker Registered"))
+          .catch((err) => console.log("Service Worker Failed:", err));
       }
-      deferredPrompt = null;
-    }
-  });
-</script>
+      
+      // Install Button Logic
+      let deferredPrompt;
+      const installBtn = document.getElementById('installBtn');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome's default pop-up
+        e.preventDefault();
+        deferredPrompt = e;
+        // Show our custom button in the login card
+        installBtn.style.display = 'block';
+      });
+
+      installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt(); // Show the native install prompt
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            installBtn.style.display = 'none'; // Hide button after successful install
+          }
+          deferredPrompt = null;
+        }
+      });
+    </script>
 </body>
 </html>
