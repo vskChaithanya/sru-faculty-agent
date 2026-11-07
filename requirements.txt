@@ -1,9 +1,10 @@
 fastapi
 uvicorn
-python-dotenv
+python-multipart
 pydantic
-langchain-core
-langchain-groq
+python-dotenv
+langchain-chroma
+langchain-huggingface
 langchain-google-genai
-langchain-pinecone
-pinecone-client
+langchain-core
+python-multipart
