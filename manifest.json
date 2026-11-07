@@ -1,20 +1,13 @@
-{
-  "name": "SRU Agentic AI Assistant",
-  "short_name": "SRU Assistant",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
-  "icons": [
-    {
-      "src": "./sru-logo.png?v=3",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "./sru-logo.png?v=3",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
-}
+"start_url": ".",
+"icons": [
+  {
+    "src": "sru-logo.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  },
+  {
+    "src": "sru-logo.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }
+]
