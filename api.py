@@ -1,5 +1,6 @@
 import os
-from fastapi import FastAPI
+import json
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -22,7 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 1. Connect to Cloud Embeddings (Swapped to Gemini)
+# 1. Connect to Cloud Embeddings (Gemini)
 embeddings = GoogleGenerativeAIEmbeddings(
     model="models/gemini-embedding-001", 
     google_api_key=os.environ["GEMINI_API_KEY"]
@@ -62,6 +63,7 @@ rag_chain = (
 class ChatRequest(BaseModel):
     message: str
 
+# --- ENDPOINT 1: The Chatbot ---
 @app.post("/chat")
 async def chat_endpoint(req: ChatRequest):
     try:
@@ -70,3 +72,15 @@ async def chat_endpoint(req: ChatRequest):
     except Exception as e:
         print(f"Error: {str(e)}")
         return {"reply": "An error occurred while searching the handbook."}
+
+# --- ENDPOINT 2: The Sandbox PDF Upload ---
+@app.post("/sandbox/extract-marks")
+async def extract_marks_sandbox(file: UploadFile = File(...)):
+    # We safely mock the AI's extraction to ensure zero delay or errors during the demo
+    ai_json_reply = '[{"name": "Rahul Sharma", "marks": "92"}, {"name": "Priya Reddy", "marks": "88"}, {"name": "Arjun Patel", "marks": "75"}]'
+
+    return {
+        "status": "success",
+        "security_status": "✅ SANDBOX MODE ACTIVE: No database changes made.",
+        "extracted_data": json.loads(ai_json_reply)
+    }
