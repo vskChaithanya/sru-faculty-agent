@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./sraap_demo_files/bootstrap.min.css">
     <link rel="stylesheet" href="./sraap_demo_files/style.css">
     <link rel="stylesheet" href="./sraap_demo_files/all.min.css">
+    <link rel="manifest" href="manifest.json">
     <!-- Font Awesome for the eye icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
@@ -177,5 +178,11 @@
             }
         }
     </script>
+    <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log("Service Worker Registered"));
+  }
+</script>
 </body>
 </html>

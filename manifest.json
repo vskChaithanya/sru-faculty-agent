@@ -1,0 +1,15 @@
+{
+  "name": "SRU Agentic AI Assistant",
+  "short_name": "SRU Assistant",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0056b3",
+  "icons": [
+    {
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRADhgWE0EagoihbRc3gtWkSZ75nFFvomv5kjvf4uyCpA&s",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
