@@ -3,8 +3,8 @@ uvicorn
 python-multipart
 pydantic
 python-dotenv
-langchain-chroma
-langchain-huggingface
-langchain-google-genai
 langchain-core
-python-multipart
+langchain-groq
+langchain-google-genai
+langchain-pinecone
+pinecone-client
