@@ -10,7 +10,7 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_groq import ChatGroq
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
-
+import pypdf
 load_dotenv()
 
 app = FastAPI()
@@ -76,11 +76,40 @@ async def chat_endpoint(req: ChatRequest):
 # --- ENDPOINT 2: The Sandbox PDF Upload ---
 @app.post("/sandbox/extract-marks")
 async def extract_marks_sandbox(file: UploadFile = File(...)):
-    # We safely mock the AI's extraction to ensure zero delay or errors during the demo
-    ai_json_reply = '[{"name": "Rahul Sharma", "marks": "92"}, {"name": "Priya Reddy", "marks": "88"}, {"name": "Arjun Patel", "marks": "75"}]'
+    try:
+        # 1. Read the uploaded PDF
+        pdf_reader = pypdf.PdfReader(file.file)
+        raw_text = ""
+        for page in pdf_reader.pages:
+            if page.extract_text():
+                raw_text += page.extract_text() + "\n"
 
-    return {
-        "status": "success",
-        "security_status": "✅ SANDBOX MODE ACTIVE: No database changes made.",
-        "extracted_data": json.loads(ai_json_reply)
-    }
+        # 2. Prompt Groq to extract the real data
+        prompt_text = f"""
+        Extract the Student Names and Marks from the following text.
+        Return ONLY a valid JSON array of objects with exactly two keys: "name" and "marks".
+        Do not include markdown formatting like ```json or any other text.
+        
+        Text:
+        {raw_text}
+        """
+        
+        # 3. Call your Groq LLM
+        messages = [("human", prompt_text)]
+        ai_response = llm.invoke(messages)
+        
+        # 4. Clean the response (strips out any markdown the AI might accidentally add)
+        clean_json = ai_response.content.replace("```json", "").replace("```", "").strip()
+        
+        return {
+            "status": "success",
+            "security_status": "✅ SANDBOX MODE ACTIVE: Real AI extraction completed. No database changes made.",
+            "extracted_data": json.loads(clean_json)
+        }
+    except Exception as e:
+        print(f"Extraction Error: {str(e)}")
+        return {
+            "status": "error",
+            "security_status": "❌ Error reading PDF or connecting to AI.",
+            "extracted_data": [{"name": "Error", "marks": "See console"}]
+        }
