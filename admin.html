@@ -12,6 +12,8 @@
         .table th { background-color: #1a365d; color: white; }
         .badge-up { background-color: #15803d; color: white; padding: 5px 10px; border-radius: 12px; font-size: 12px; }
         .badge-down { background-color: #b91c1c; color: white; padding: 5px 10px; border-radius: 12px; font-size: 12px; }
+        .btn-delete { background-color: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+        .btn-delete:hover { background-color: #c82333; }
     </style>
 </head>
 <body>
@@ -34,11 +36,12 @@
                             <th>Question Asked</th>
                             <th>Rating</th>
                             <th>User Suggestion</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="feedback-table-body">
                         <tr>
-                            <td colspan="5" class="text-center text-muted">Loading feedback logs from secure database...</td>
+                            <td colspan="6" class="text-center text-muted">Loading feedback logs from secure database...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -47,31 +50,29 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", async () => {
+        // Load data when page opens
+        document.addEventListener("DOMContentLoaded", fetchFeedback);
+
+        async function fetchFeedback() {
             const tableBody = document.getElementById("feedback-table-body");
+            tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">Loading...</td></tr>`;
             
             try {
-                // Fetch the data from your live Render server
                 const response = await fetch("https://sru-faculty-agent.onrender.com/api/admin/feedback");
                 const result = await response.json();
                 
                 if (result.status === "success" && result.data.length > 0) {
-                    tableBody.innerHTML = ""; // Clear loading message
+                    tableBody.innerHTML = ""; 
                     
                     result.data.forEach(log => {
-                        // Format the timestamp into a readable date
                         const dateObj = new Date(log.timestamp);
                         const formattedDate = dateObj.toLocaleDateString() + " " + dateObj.toLocaleTimeString();
-                        
-                        // Format the rating badge
                         const ratingBadge = log.feedback_type === "up" 
                             ? `<span class="badge-up">👍 Helpful</span>` 
                             : `<span class="badge-down">👎 Needs Work</span>`;
-                            
-                        // Handle empty suggestions gracefully
                         const suggestionText = log.suggestion ? log.suggestion : "<i class='text-muted'>No written suggestion</i>";
 
-                        // Build the table row
+                        // Note: log._id is passed into the deleteFeedback function
                         const row = `
                             <tr>
                                 <td style="font-size: 12px; white-space: nowrap;">${formattedDate}</td>
@@ -79,18 +80,44 @@
                                 <td style="font-size: 14px;">${log.question}</td>
                                 <td>${ratingBadge}</td>
                                 <td style="font-size: 14px; color: #b91c1c;">${suggestionText}</td>
+                                <td>
+                                    <button class="btn-delete" onclick="deleteFeedback('${log._id}')">🗑️ Delete</button>
+                                </td>
                             </tr>
                         `;
                         tableBody.innerHTML += row;
                     });
                 } else {
-                    tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">No feedback logs found in the database.</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">No feedback logs found.</td></tr>`;
                 }
             } catch (error) {
-                console.error("Fetch error:", error);
-                tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger"><b>Error connecting to AI Server. Ensure the backend is live.</b></td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger"><b>Error connecting to Server.</b></td></tr>`;
             }
-        });
+        }
+
+        async function deleteFeedback(logId) {
+            // Ask for confirmation before deleting
+            const confirmDelete = confirm("Are you sure you want to permanently delete this feedback?");
+            if (!confirmDelete) return;
+
+            try {
+                const response = await fetch(`https://sru-faculty-agent.onrender.com/api/admin/feedback/${logId}`, {
+                    method: "DELETE"
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === "success") {
+                    // Refresh the table immediately to show it's gone
+                    fetchFeedback(); 
+                } else {
+                    alert("Error: Could not delete the record.");
+                }
+            } catch (error) {
+                console.error("Delete error:", error);
+                alert("Failed to connect to the server.");
+            }
+        }
     </script>
 </body>
 </html>

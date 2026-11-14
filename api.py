@@ -13,6 +13,7 @@ from langchain_pinecone import PineconeVectorStore
 import pypdf
 from pymongo import MongoClient
 from datetime import datetime
+from bson.objectid import ObjectId
 
 
 load_dotenv()
@@ -169,3 +170,20 @@ async def get_all_feedback():
     except Exception as e:
         print(f"Admin Fetch Error: {str(e)}")
         return {"status": "error", "message": "Failed to fetch feedback logs."}
+# --- ENDPOINT 5: Delete Feedback ---
+@app.delete("/api/admin/feedback/{log_id}")
+async def delete_feedback(log_id: str):
+    if feedback_collection is None:
+        return {"status": "error", "message": "Database not linked."}
+    
+    try:
+        # Attempt to delete the document matching the ID
+        result = feedback_collection.delete_one({"_id": ObjectId(log_id)})
+        
+        if result.deleted_count == 1:
+            return {"status": "success", "message": "Feedback deleted successfully."}
+        else:
+            return {"status": "error", "message": "Feedback not found."}
+    except Exception as e:
+        print(f"Delete Error: {str(e)}")
+        return {"status": "error", "message": "Failed to delete feedback."}
