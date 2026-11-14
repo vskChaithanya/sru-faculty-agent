@@ -9,3 +9,4 @@ langchain-google-genai
 langchain-pinecone
 pinecone-client
 pypdf
+pymongo

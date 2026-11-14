@@ -11,6 +11,10 @@ from langchain_groq import ChatGroq
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 import pypdf
+from pymongo import MongoClient
+from datetime import datetime
+
+
 load_dotenv()
 
 app = FastAPI()
@@ -63,6 +67,20 @@ rag_chain = (
 class ChatRequest(BaseModel):
     message: str
 
+class FeedbackRequest(BaseModel):
+    user_id: str
+    question: str
+    feedback_type: str
+    suggestion: str = ""
+
+# Connect to MongoDB Atlas (Graceful fallback if environment variable is missing)
+mongo_uri = os.environ.get("MONGO_URI")
+feedback_collection = None
+if mongo_uri:
+    mongo_client = MongoClient(mongo_uri)
+    db = mongo_client["sru_assistant"]
+    feedback_collection = db["feedback_logs"]
+
 # --- ENDPOINT 1: The Chatbot ---
 @app.post("/chat")
 async def chat_endpoint(req: ChatRequest):
@@ -72,6 +90,8 @@ async def chat_endpoint(req: ChatRequest):
     except Exception as e:
         print(f"Error: {str(e)}")
         return {"reply": "An error occurred while searching the handbook."}
+    
+
 
 # --- ENDPOINT 2: The Sandbox PDF Upload ---
 @app.post("/sandbox/extract-marks")
@@ -113,3 +133,18 @@ async def extract_marks_sandbox(file: UploadFile = File(...)):
             "security_status": "❌ Error reading PDF or connecting to AI.",
             "extracted_data": [{"name": "Error", "marks": "See console"}]
         }
+# --- ENDPOINT 3: Feedback & Maintenance Tracking ---
+@app.post("/feedback")
+async def log_feedback(req: FeedbackRequest):
+    if feedback_collection is None:
+        return {"status": "error", "message": "Database not linked yet."}
+        
+    doc = req.model_dump()
+    doc["timestamp"] = datetime.utcnow().isoformat()
+    
+    try:
+        feedback_collection.insert_one(doc)
+        return {"status": "success", "message": "Feedback recorded."}
+    except Exception as e:
+        print(f"MongoDB Error: {str(e)}")
+        return {"status": "error", "message": "Failed to save feedback."}
