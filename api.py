@@ -148,3 +148,24 @@ async def log_feedback(req: FeedbackRequest):
     except Exception as e:
         print(f"MongoDB Error: {str(e)}")
         return {"status": "error", "message": "Failed to save feedback."}
+
+# --- ENDPOINT 4: Admin Panel Data Fetch ---
+@app.get("/api/admin/feedback")
+async def get_all_feedback():
+    if feedback_collection is None:
+        return {"status": "error", "message": "Database not linked yet."}
+    
+    try:
+        # Fetch all logs from MongoDB, sorted by newest first (-1)
+        cursor = feedback_collection.find().sort("timestamp", -1)
+        logs = []
+        for doc in cursor:
+            # MongoDB uses 'ObjectId' for _id, which cannot be sent over standard JSON.
+            # We must convert it to a normal string first.
+            doc["_id"] = str(doc["_id"])
+            logs.append(doc)
+            
+        return {"status": "success", "data": logs}
+    except Exception as e:
+        print(f"Admin Fetch Error: {str(e)}")
+        return {"status": "error", "message": "Failed to fetch feedback logs."}
