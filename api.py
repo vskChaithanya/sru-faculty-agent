@@ -39,7 +39,7 @@ vectorstore = PineconeVectorStore(index_name="sru-handbook", embedding=embedding
 retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
 # 3. Connect to Groq LLM
-llm = ChatGroq(model="openai/gpt-oss-20b", temperature=0.2)
+llm = ChatGroq(model="llama3-8b-8192", temperature=0.2)
 
 # 4. Strict Handbook Prompt
 template = """You are the official SR University Faculty Assistant.
