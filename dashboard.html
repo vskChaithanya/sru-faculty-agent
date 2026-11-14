@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Academics & Administration Portal</title>
+    <link rel="stylesheet" href="./sraap_demo_files/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body { background-color: #f4f6f9; font-family: sans-serif; }
+        .top-nav { background-color: #1a365d; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-links a { color: white; margin-right: 15px; text-decoration: none; font-size: 12px; }
+        .yellow-bar { background-color: #ffc107; padding: 5px; font-size: 12px; font-weight: bold; text-align: center; }
+        .stat-card { color: white; padding: 20px; border-radius: 5px; height: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation -->
+    <div class="top-nav">
+        <div class="d-flex align-items-center">
+            <h3 class="m-0 me-4">SR UNIVERSITY</h3>
+            <div class="nav-links d-none d-md-block">
+                <a href="#">Home</a> <a href="#">Academics</a> <a href="#">Profile</a> <a href="#">Course Reg.</a> <a href="#">Attendance</a> <a href="#">Feedback</a>
+            </div>
+        </div>
+        <div style="font-size: 12px;">
+            Welcome to <span id="nav-user-name" style="text-transform: uppercase;">User</span> | <a href="index.html" style="color:white;">Logout</a>
+        </div>
+    </div>
+    
+    <div class="yellow-bar">
+        Today's Schedule: | Department/School Monthly Meeting (3.00 PM to 5.00 PM) | Click to View Timetable |
+    </div>
+
+    <!-- Profile Section (Change 1 & 2) -->
+    <div class="container text-center mt-4">
+        <!-- Generic AI Profile Photo -->
+        <img src="https://cdn-icons-png.flaticon.com/512/8649/8649603.png" alt="AI Faculty" style="width: 100px; height: 100px; border-radius: 50%; background: white; padding: 5px; border: 2px solid #1a365d;">
+        <!-- Dynamic Name from Login -->
+        <h4 class="mt-2 text-uppercase" id="profile-name">Loading...</h4>
+        <p class="text-muted">Faculty Member - School of CS & AI</p>
+    </div>
+
+    <!-- Colored Tiles (Change 3 & 4) -->
+    <div class="container mt-4">
+        <div class="row g-3">
+            <div class="col-md-2">
+                <div class="stat-card" style="background-color: #17a2b8;">
+                    <h5>2026-2027</h5>
+                    <p style="font-size:12px;">Current Academic Year</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card" style="background-color: #28a745;">
+                    <h5 id="attendance-stat">98.5%</h5>
+                    <p style="font-size:12px;">Overall Attendance %</p>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="stat-card" style="background-color: #ffc107; color: black;">
+                    <h5>HOD CS&AI</h5>
+                    <p style="font-size:12px;">Reporting Authority</p>
+                </div>
+            </div>
+            <!-- Change 3: Faculty Subject replacing CGPA -->
+            <div class="col-md-3">
+                <div class="stat-card" style="background-color: #20c997;">
+                    <h5>Agentic AI</h5>
+                    <p style="font-size:12px;">Assigned Subject</p>
+                </div>
+            </div>
+            <!-- Change 4: Random Students replacing Backlogs -->
+            <div class="col-md-2">
+                <div class="stat-card" style="background-color: #007bff;">
+                    <h5 id="random-students">0</h5>
+                    <p style="font-size:12px;">Assigned Students</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Placeholder for Tables from screenshot -->
+    <div class="container mt-5 text-center text-muted">
+        <p><i>Attendance and Course tables will load here...</i></p>
+    </div>
+
+    <!-- CHATBOT WIDGET START -->
+    <div id="sru-chatbot" style="display:none; position:fixed; bottom:80px; right:20px; width:350px; height:500px; background:white; border-radius:10px; box-shadow:0px 5px 15px rgba(0,0,0,0.2); z-index:9999; display:flex; flex-direction:column; overflow:hidden;">
+        <div style="background:#1a365d; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:bold; font-family:sans-serif;">SRU Agentic AI Assistant</span>
+            <button onclick="toggleChat()" style="background:none; border:none; color:white; cursor:pointer; font-size:16px;">✖</button>
+        </div>
+        <div id="chat-messages" style="flex:1; padding:15px; overflow-y:auto; font-family:sans-serif; font-size:14px; background:#f4f6f9;">
+            <div style="background:#e2e8f0; color:black; padding:10px; border-radius:10px; margin-bottom:10px; width:fit-content;">
+                Hello! I am the SRU Faculty Assistant. Ask me anything about the handbook.
+            </div>
+        </div>
+        <div style="padding:15px; border-top:1px solid #ddd; background:white; display:flex; gap:10px;">
+            <input type="text" id="chat-input" placeholder="Type a message..." style="flex:1; padding:10px; border:1px solid #ccc; border-radius:20px; outline:none; font-family:sans-serif;" onkeypress="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()" style="background:#1a365d; color:white; border:none; padding:10px 15px; border-radius:50%; cursor:pointer;">➤</button>
+        </div>
+    </div>
+    <button onclick="toggleChat()" style="position:fixed; bottom:20px; right:20px; width:60px; height:60px; background:#1a365d; color:white; border:none; border-radius:50%; box-shadow:0px 4px 10px rgba(0,0,0,0.3); cursor:pointer; z-index:10000; font-size:24px; display:flex; justify-content:center; align-items:center;">🤖</button>
+    <!-- CHATBOT WIDGET END -->
+
+    <script>
+        // ON PAGE LOAD: Fetch login ID and generate random number
+        document.addEventListener("DOMContentLoaded", () => {
+            // Retrieve ID from the login page, default if accessed directly
+            const facultyId = localStorage.getItem('faculty_id') || "Guest_Faculty";
+            
+            // Apply it to the UI elements
+            document.getElementById('nav-user-name').innerText = facultyId;
+            document.getElementById('profile-name').innerText = facultyId;
+            
+            // Generate random number of students between 30 and 70
+            const randomStudentCount = Math.floor(Math.random() * (70 - 30 + 1)) + 30;
+            document.getElementById('random-students').innerText = randomStudentCount;
+        });
+
+        // CHATBOT & FEEDBACK LOGIC
+        // Use the localStorage ID for feedback database tracking
+        let currentUserId = localStorage.getItem('faculty_id') || "Guest_Faculty";
+
+        function toggleChat() {
+            const chat = document.getElementById("sru-chatbot");
+            chat.style.display = chat.style.display === "none" ? "flex" : "none";
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById("chat-input");
+            const messageText = input.value.trim();
+            if (!messageText) return;
+
+            const msgContainer = document.getElementById("chat-messages");
+            msgContainer.innerHTML += `<div style="background:#1a365d; color:white; padding:10px; border-radius:10px; margin-bottom:10px; margin-left:auto; width:fit-content; max-width:80%; font-family:sans-serif;">${messageText}</div>`;
+            input.value = "";
+            
+            const loaderId = "loader-" + Date.now();
+            msgContainer.innerHTML += `<div id="${loaderId}" style="color:gray; font-size:12px; margin-bottom:10px; font-family:sans-serif;">Thinking...</div>`;
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+
+            try {
+                const response = await fetch("https://sru-faculty-agent.onrender.com/chat", {
+                    method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: messageText })
+                });
+                
+                const data = await response.json();
+                document.getElementById(loaderId).remove();
+                const formattedReply = marked.parse(data.reply);
+                
+                const msgId = Date.now();
+                const safeQuestion = messageText.replace(/'/g, "\\'").replace(/"/g, '\\"');
+
+                msgContainer.innerHTML += `
+                    <div style="background:#e2e8f0; color:black; padding:10px 15px; border-radius:10px; margin-bottom:10px; width:fit-content; max-width:85%; font-family:sans-serif; line-height:1.4;">
+                        ${formattedReply}
+                        <div style="margin-top:12px; padding-top:8px; border-top:1px solid #cbd5e1; font-size:12px; display:flex; gap:10px; align-items:center;">
+                            <span style="color:#475569;">Was this helpful?</span>
+                            <button onclick="sendFeedback('${msgId}', 'up', '${safeQuestion}')" style="border:none; background:none; cursor:pointer; font-size:16px;">👍</button>
+                            <button onclick="showSuggestionBox('${msgId}')" style="border:none; background:none; cursor:pointer; font-size:16px;">👎</button>
+                        </div>
+                        <div id="sug-box-${msgId}" style="display:none; margin-top:10px; gap:8px; flex-direction:column;">
+                            <input type="text" id="sug-input-${msgId}" placeholder="How can we improve this answer?" style="padding:8px; border:1px solid #cbd5e1; border-radius:5px; width:100%; font-size:12px;">
+                            <button onclick="sendFeedback('${msgId}', 'down', '${safeQuestion}')" style="background:#1a365d; color:white; border:none; padding:6px; border-radius:5px; cursor:pointer; font-size:12px; font-weight:bold;">Submit Suggestion</button>
+                        </div>
+                    </div>`;
+            } catch (error) {
+                document.getElementById(loaderId).remove();
+                msgContainer.innerHTML += `<div style="color:red; font-size:12px; margin-bottom:10px; font-family:sans-serif;">Error connecting to AI Server.</div>`;
+            }
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+        }
+
+        function showSuggestionBox(msgId) {
+            const box = document.getElementById(`sug-box-${msgId}`);
+            box.style.display = box.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        async function sendFeedback(msgId, type, question) {
+            let suggestionText = "";
+            if (type === 'down') {
+                const inputField = document.getElementById(`sug-input-${msgId}`);
+                if (!inputField.value.trim()) { alert("Please enter a suggestion so we can improve."); return; }
+                suggestionText = inputField.value.trim();
+            }
+
+            try {
+                const response = await fetch("https://sru-faculty-agent.onrender.com/feedback", {
+                    method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ user_id: currentUserId, question: question, feedback_type: type, suggestion: suggestionText })
+                });
+
+                if (response.ok) {
+                    const box = document.getElementById(`sug-box-${msgId}`);
+                    if (box) {
+                        box.style.display = 'flex';
+                        box.innerHTML = "<span style='color:#15803d; font-weight:bold; font-size:12px;'>✅ Feedback recorded! Thank you.</span>";
+                    }
+                    if (type === 'up') alert("Thanks for the positive feedback!");
+                }
+            } catch(error) { console.error("Feedback error:", error); }
+        }
+    </script>
+</body>
+</html>
