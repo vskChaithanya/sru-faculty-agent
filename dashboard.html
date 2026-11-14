@@ -28,7 +28,7 @@
         
         /* Profile Section */
         .profile-container { display: flex; align-items: center; justify-content: center; margin-top: -30px; position: relative; z-index: 10; }
-        .profile-img { width: 90px; height: 90px; border-radius: 50%; border: 4px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); background-color: white; object-fit: cover; }
+        .profile-img { width: 95px; height: 95px; border-radius: 50%; border: 4px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); background-color: white; object-fit: cover; }
         .profile-info { margin-left: 20px; text-align: left; margin-top: 30px; }
         .profile-info h5 { margin: 0; font-size: 18px; font-weight: bold; color: #333; }
         .profile-info p { margin: 0; font-size: 14px; color: #555; }
@@ -102,7 +102,8 @@
     <!-- Profile Area -->
     <div class="container text-center mb-4">
         <div class="profile-container">
-            <img src="https://cdn-icons-png.flaticon.com/512/8649/8649603.png" alt="Faculty" class="profile-img">
+            <!-- Animated Faculty Avatar Custom Made From Uploaded Photograph -->
+            <img id="faculty-avatar-img" class="profile-img" alt="Animated Avatar">
             <div class="profile-info">
                 <h5 id="profile-name">LOADING...</h5>
                 <p>Faculty Member - School of CS & AI</p>
@@ -138,7 +139,7 @@
             <div class="col">
                 <div class="stat-card bg-yellow">
                     <div class="stat-card-body">
-                        <h3 style="font-size: 16px;">DR. RAVI CHANDER J</h3>
+                        <h3 style="font-size: 16px;">DR. SHESHIKALA MARTHA</h3>
                         <p>Reporting Authority</p>
                     </div>
                     <a href="#" class="stat-card-footer" style="color: black;">More info <i class="fas fa-arrow-circle-right"></i></a>
@@ -167,13 +168,13 @@
         </div>
     </div>
 
-    <!-- Tables Section -->
+    <!-- Attendance Section -->
     <div class="container mb-5">
-        <div class="row">
-            <!-- Left Table -->
-            <div class="col-md-5">
+        <div class="row justify-content-center">
+            <!-- Left Table Expanded Since Right Table Is Removed -->
+            <div class="col-md-8">
                 <div class="custom-table-header">Last Week Attendance %</div>
-                <table class="table table-bordered table-striped text-center">
+                <table class="table table-bordered table-striped text-center shadow-sm">
                     <thead>
                         <tr>
                             <th>S.No</th>
@@ -190,28 +191,6 @@
                         <tr><td>5</td><td>09-11-2026</td><td>1</td><td>0</td></tr>
                         <tr><td>6</td><td>06-11-2026</td><td>3</td><td>3</td></tr>
                         <tr><td>7</td><td>04-11-2026</td><td>4</td><td>4</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Right Table -->
-            <div class="col-md-7">
-                <div class="custom-table-header">Course Wise Attendance %</div>
-                <table class="table table-bordered table-striped text-center">
-                    <thead>
-                        <tr>
-                            <th>S.No</th>
-                            <th>Course Name</th>
-                            <th>LTP Cls</th>
-                            <th>Held Cls</th>
-                            <th>PR</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>1</td><td class="text-start text-primary fw-bold">AGENTIC AI</td><td>48</td><td>39</td><td>32</td></tr>
-                        <tr><td>2</td><td class="text-start text-primary fw-bold">QUANTUM COMPUTING</td><td>48</td><td>42</td><td>32</td></tr>
-                        <tr><td>3</td><td class="text-start text-primary fw-bold">COMPILER DESIGN</td><td>48</td><td>35</td><td>28</td></tr>
-                        <tr><td>4</td><td class="text-start text-primary fw-bold">DATA CENTER OPERATIONS AND INFRASTRUCTURE</td><td>36</td><td>26</td><td>19</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -242,6 +221,9 @@
             const facultyId = localStorage.getItem('faculty_id') || "Guest_Faculty";
             document.getElementById('nav-user-name').innerText = facultyId;
             document.getElementById('profile-name').innerText = facultyId;
+            
+            // Assign newly animated visual photograph
+            document.getElementById('faculty-avatar-img').src = "animated_faculty_photo.png";
             
             const randomStudentCount = Math.floor(Math.random() * (70 - 30 + 1)) + 30;
             document.getElementById('random-students').innerText = randomStudentCount;
@@ -323,7 +305,7 @@
                     const box = document.getElementById(`sug-box-${msgId}`);
                     if (box) {
                         box.style.display = 'flex';
-                        box.innerHTML = "<span style='color:#1580 font-weight:bold; font-size:12px;'>✅ Feedback recorded! Thank you.</span>";
+                        box.innerHTML = "<span style='color:#15803d; font-weight:bold; font-size:12px;'>✅ Feedback recorded! Thank you.</span>";
                     }
                 }
             } catch(error) { console.error("Feedback error:", error); }
