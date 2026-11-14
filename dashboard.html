@@ -8,82 +8,214 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        body { background-color: #f4f6f9; font-family: sans-serif; }
-        .top-nav { background-color: #1a365d; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .nav-links a { color: white; margin-right: 15px; text-decoration: none; font-size: 12px; }
-        .yellow-bar { background-color: #ffc107; padding: 5px; font-size: 12px; font-weight: bold; text-align: center; }
-        .stat-card { color: white; padding: 20px; border-radius: 5px; height: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        body { 
+            background-color: #f8f9fa; 
+            font-family: Arial, sans-serif; 
+        }
+        
+        /* Top Navigation Header */
+        .header-bg { background-color: #113264; color: white; padding-top: 10px; }
+        .portal-title { font-size: 28px; font-weight: bold; margin-bottom: 0; }
+        .nav-links-row { font-size: 11px; font-weight: bold; margin-top: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-links-row a { color: white; text-decoration: none; margin-right: 18px; }
+        .nav-links-row a:hover { text-decoration: underline; }
+        .welcome-text { font-size: 11px; text-align: right; color: yellow; font-weight: bold; }
+        .welcome-text a { color: white; text-decoration: none; margin-left: 10px; }
+        
+        /* Sub-header Bars */
+        .pink-bar { background-color: #ffe8e8; color: #d9534f; font-size: 12px; font-weight: bold; padding: 6px 15px; text-align: center; }
+        .yellow-bar { background-color: #ffcc00; color: black; font-size: 12px; font-weight: bold; padding: 6px 15px; text-align: right; }
+        
+        /* Profile Section */
+        .profile-container { display: flex; align-items: center; justify-content: center; margin-top: -30px; position: relative; z-index: 10; }
+        .profile-img { width: 90px; height: 90px; border-radius: 50%; border: 4px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); background-color: white; object-fit: cover; }
+        .profile-info { margin-left: 20px; text-align: left; margin-top: 30px; }
+        .profile-info h5 { margin: 0; font-size: 18px; font-weight: bold; color: #333; }
+        .profile-info p { margin: 0; font-size: 14px; color: #555; }
+        
+        /* Stat Cards */
+        .stat-card { border-radius: 0; color: white; height: 100%; position: relative; padding-bottom: 30px; }
+        .stat-card-body { padding: 15px; }
+        .stat-card h3 { font-size: 20px; font-weight: bold; margin-bottom: 5px; }
+        .stat-card p { font-size: 11px; margin-bottom: 0; }
+        .stat-card-footer { position: absolute; bottom: 0; width: 100%; padding: 5px 15px; font-size: 11px; text-align: right; background: rgba(0,0,0,0.15); display: block; color: white; text-decoration: none; }
+        .stat-card-footer:hover { color: white; background: rgba(0,0,0,0.25); text-decoration: none; }
+        
+        /* Card Colors */
+        .bg-teal { background-color: #17a2b8; }
+        .bg-green { background-color: #28a745; }
+        .bg-yellow { background-color: #ffc107; color: black !important; }
+        .bg-mint { background-color: #20c997; }
+        .bg-blue { background-color: #007bff; }
+        
+        /* Tables */
+        .custom-table-header { background-color: #343a40; color: white; padding: 10px; font-weight: bold; font-size: 14px; text-align: center; border-radius: 4px 4px 0 0; margin-bottom: 0; }
+        .table { background: white; font-size: 12px; }
+        .table thead th { border-bottom: 2px solid #dee2e6; color: #495057; }
     </style>
 </head>
 <body>
 
-    <!-- Top Navigation -->
-    <div class="top-nav">
-        <div class="d-flex align-items-center">
-            <h3 class="m-0 me-4">SR UNIVERSITY</h3>
-            <div class="nav-links d-none d-md-block">
-                <a href="#">Home</a> <a href="#">Academics</a> <a href="#">Profile</a> <a href="#">Course Reg.</a> <a href="#">Attendance</a> <a href="#">Feedback</a>
+    <!-- Header Section -->
+    <div class="header-bg container-fluid">
+        <div class="row align-items-center px-3">
+            <div class="col-md-4 d-flex align-items-center">
+                <img src="./sraap_demo_files/SRU_white.png" alt="SRU Logo" style="height: 40px; margin-right: 15px;">
+            </div>
+            <div class="col-md-8 text-end">
+                <h1 class="portal-title">Academics & Administration Portal</h1>
             </div>
         </div>
-        <div style="font-size: 12px;">
-            Welcome to <span id="nav-user-name" style="text-transform: uppercase;">User</span> | <a href="index.html" style="color:white;">Logout</a>
+        
+        <div class="row px-3 nav-links-row align-items-center">
+            <div class="col-md-9">
+                <a href="#">Home</a>
+                <a href="#">Academics +</a>
+                <a href="#">Profile +</a>
+                <a href="#">Course Reg. +</a>
+                <a href="#">Attendance +</a>
+                <a href="#">Results +</a>
+                <a href="#">Feedback +</a>
+                <a href="#">Exams +</a>
+                <a href="#">Grievance +</a>
+                <a href="#">University Clubs</a>
+                <a href="#">Central Library</a>
+                <a href="#">Placements</a>
+                <a href="#">No Due</a>
+            </div>
+            <div class="col-md-3 welcome-text">
+                Welcome to <span id="nav-user-name" style="text-transform: uppercase;">USER</span> 
+                <a href="#">Password</a> 
+                <a href="index.html">Logout <i class="fas fa-user-circle"></i></a>
+            </div>
         </div>
     </div>
-    
+
+    <!-- Info Bars -->
+    <div class="pink-bar">
+        Today's Schedule: | Ph.D. Scholars Certificate Distribution Ceremony | | Department/School Monthly Meeting (3.00 PM to 5.00 PM) | | Vyuha-Management Meet. |
+    </div>
     <div class="yellow-bar">
-        Today's Schedule: | Department/School Monthly Meeting (3.00 PM to 5.00 PM) | Click to View Timetable |
+        Click to View Timetable  |  Click to View NPTEL Live Sessions
     </div>
 
-    <!-- Profile Section (Change 1 & 2) -->
-    <div class="container text-center mt-4">
-        <!-- Generic AI Profile Photo -->
-        <img src="https://cdn-icons-png.flaticon.com/512/8649/8649603.png" alt="AI Faculty" style="width: 100px; height: 100px; border-radius: 50%; background: white; padding: 5px; border: 2px solid #1a365d;">
-        <!-- Dynamic Name from Login -->
-        <h4 class="mt-2 text-uppercase" id="profile-name">Loading...</h4>
-        <p class="text-muted">Faculty Member - School of CS & AI</p>
+    <!-- Profile Area -->
+    <div class="container text-center mb-4">
+        <div class="profile-container">
+            <img src="https://cdn-icons-png.flaticon.com/512/8649/8649603.png" alt="Faculty" class="profile-img">
+            <div class="profile-info">
+                <h5 id="profile-name">LOADING...</h5>
+                <p>Faculty Member - School of CS & AI</p>
+                <p>Designation - Assistant Professor</p>
+            </div>
+        </div>
     </div>
 
-    <!-- Colored Tiles (Change 3 & 4) -->
-    <div class="container mt-4">
-        <div class="row g-3">
-            <div class="col-md-2">
-                <div class="stat-card" style="background-color: #17a2b8;">
-                    <h5>2026-2027</h5>
-                    <p style="font-size:12px;">Current Academic Year</p>
+    <!-- Stat Cards -->
+    <div class="container mb-4">
+        <div class="row g-2 row-cols-1 row-cols-md-5">
+            <!-- Card 1 -->
+            <div class="col">
+                <div class="stat-card bg-teal">
+                    <div class="stat-card-body">
+                        <h3>2026-2027</h3>
+                        <p>Current Academic Year</p>
+                    </div>
+                    <a href="#" class="stat-card-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="stat-card" style="background-color: #28a745;">
-                    <h5 id="attendance-stat">98.5%</h5>
-                    <p style="font-size:12px;">Overall Attendance %</p>
+            <!-- Card 2 -->
+            <div class="col">
+                <div class="stat-card bg-green">
+                    <div class="stat-card-body">
+                        <h3>98.5%</h3>
+                        <p>Overall Attendance %</p>
+                    </div>
+                    <a href="#" class="stat-card-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <div class="col-md-2">
-                <div class="stat-card" style="background-color: #ffc107; color: black;">
-                    <h5>HOD CS&AI</h5>
-                    <p style="font-size:12px;">Reporting Authority</p>
+            <!-- Card 3 -->
+            <div class="col">
+                <div class="stat-card bg-yellow">
+                    <div class="stat-card-body">
+                        <h3 style="font-size: 16px;">DR. RAVI CHANDER J</h3>
+                        <p>Reporting Authority</p>
+                    </div>
+                    <a href="#" class="stat-card-footer" style="color: black;">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <!-- Change 3: Faculty Subject replacing CGPA -->
-            <div class="col-md-3">
-                <div class="stat-card" style="background-color: #20c997;">
-                    <h5>Agentic AI</h5>
-                    <p style="font-size:12px;">Assigned Subject</p>
+            <!-- Card 4 (Faculty Subject) -->
+            <div class="col">
+                <div class="stat-card bg-mint">
+                    <div class="stat-card-body">
+                        <h3>Agentic AI</h3>
+                        <p>Assigned Subject</p>
+                    </div>
+                    <a href="#" class="stat-card-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <!-- Change 4: Random Students replacing Backlogs -->
-            <div class="col-md-2">
-                <div class="stat-card" style="background-color: #007bff;">
-                    <h5 id="random-students">0</h5>
-                    <p style="font-size:12px;">Assigned Students</p>
+            <!-- Card 5 (Random Students) -->
+            <div class="col">
+                <div class="stat-card bg-blue">
+                    <div class="stat-card-body">
+                        <h3 id="random-students">0</h3>
+                        <p>Assigned Students</p>
+                    </div>
+                    <a href="#" class="stat-card-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Placeholder for Tables from screenshot -->
-    <div class="container mt-5 text-center text-muted">
-        <p><i>Attendance and Course tables will load here...</i></p>
+    <!-- Tables Section -->
+    <div class="container mb-5">
+        <div class="row">
+            <!-- Left Table -->
+            <div class="col-md-5">
+                <div class="custom-table-header">Last Week Attendance %</div>
+                <table class="table table-bordered table-striped text-center">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Date</th>
+                            <th>Held</th>
+                            <th>Attend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>13-11-2026</td><td>3</td><td>3</td></tr>
+                        <tr><td>2</td><td>12-11-2026</td><td>4</td><td>2</td></tr>
+                        <tr><td>3</td><td>11-11-2026</td><td>4</td><td>4</td></tr>
+                        <tr><td>4</td><td>10-11-2026</td><td>3</td><td>2</td></tr>
+                        <tr><td>5</td><td>09-11-2026</td><td>1</td><td>0</td></tr>
+                        <tr><td>6</td><td>06-11-2026</td><td>3</td><td>3</td></tr>
+                        <tr><td>7</td><td>04-11-2026</td><td>4</td><td>4</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Right Table -->
+            <div class="col-md-7">
+                <div class="custom-table-header">Course Wise Attendance %</div>
+                <table class="table table-bordered table-striped text-center">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Course Name</th>
+                            <th>LTP Cls</th>
+                            <th>Held Cls</th>
+                            <th>PR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="text-start text-primary fw-bold">AGENTIC AI</td><td>48</td><td>39</td><td>32</td></tr>
+                        <tr><td>2</td><td class="text-start text-primary fw-bold">QUANTUM COMPUTING</td><td>48</td><td>42</td><td>32</td></tr>
+                        <tr><td>3</td><td class="text-start text-primary fw-bold">COMPILER DESIGN</td><td>48</td><td>35</td><td>28</td></tr>
+                        <tr><td>4</td><td class="text-start text-primary fw-bold">DATA CENTER OPERATIONS AND INFRASTRUCTURE</td><td>36</td><td>26</td><td>19</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <!-- CHATBOT WIDGET START -->
@@ -106,22 +238,15 @@
     <!-- CHATBOT WIDGET END -->
 
     <script>
-        // ON PAGE LOAD: Fetch login ID and generate random number
         document.addEventListener("DOMContentLoaded", () => {
-            // Retrieve ID from the login page, default if accessed directly
             const facultyId = localStorage.getItem('faculty_id') || "Guest_Faculty";
-            
-            // Apply it to the UI elements
             document.getElementById('nav-user-name').innerText = facultyId;
             document.getElementById('profile-name').innerText = facultyId;
             
-            // Generate random number of students between 30 and 70
             const randomStudentCount = Math.floor(Math.random() * (70 - 30 + 1)) + 30;
             document.getElementById('random-students').innerText = randomStudentCount;
         });
 
-        // CHATBOT & FEEDBACK LOGIC
-        // Use the localStorage ID for feedback database tracking
         let currentUserId = localStorage.getItem('faculty_id') || "Guest_Faculty";
 
         function toggleChat() {
@@ -198,9 +323,8 @@
                     const box = document.getElementById(`sug-box-${msgId}`);
                     if (box) {
                         box.style.display = 'flex';
-                        box.innerHTML = "<span style='color:#15803d; font-weight:bold; font-size:12px;'>✅ Feedback recorded! Thank you.</span>";
+                        box.innerHTML = "<span style='color:#1580 font-weight:bold; font-size:12px;'>✅ Feedback recorded! Thank you.</span>";
                     }
-                    if (type === 'up') alert("Thanks for the positive feedback!");
                 }
             } catch(error) { console.error("Feedback error:", error); }
         }
