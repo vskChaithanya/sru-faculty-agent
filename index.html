@@ -83,17 +83,26 @@
     </header>
 
     <script>
-        // LOGIN REDIRECT LOGIC
+        // LOGIN REDIRECT LOGIC WITH ADMIN BYPASS
         document.getElementById('login-btn').addEventListener('click', function(e) {
             e.preventDefault();
+            
             const userInput = document.getElementById('user_id').value.trim();
-            // Default to "Faculty_Member" if they leave it blank
+            const passInput = document.getElementById('user_password').value.trim();
+
+            // 1. Check for Permanent Admin Login
+            if (userInput === "admin" && passInput === "sruadmin123") {
+                window.location.href = 'admin.html';
+                return; // Stop the function here so they go to admin, not dashboard
+            }
+
+            // 2. Normal Faculty Login (If not admin)
             const finalUserId = userInput !== "" ? userInput : "Faculty_Member";
             
-            // Save to browser storage so page 2 can read it
+            // Save to browser storage so page 2 can read the name
             localStorage.setItem('faculty_id', finalUserId);
             
-            // Redirect to the new dashboard page
+            // Redirect to the faculty portal
             window.location.href = 'dashboard.html';
         });
 
