@@ -142,6 +142,7 @@ async def log_feedback(req: FeedbackRequest):
         
     doc = req.model_dump()
     doc["timestamp"] = datetime.utcnow().isoformat()
+    doc["status"] = "Pending"
     
     try:
         feedback_collection.insert_one(doc)
@@ -187,3 +188,32 @@ async def delete_feedback(log_id: str):
     except Exception as e:
         print(f"Delete Error: {str(e)}")
         return {"status": "error", "message": "Failed to delete feedback."}
+# --- ENDPOINT 6: Admin Mark as Resolved ---
+@app.put("/api/admin/feedback/{log_id}/resolve")
+async def resolve_feedback(log_id: str):
+    if feedback_collection is None:
+        return {"status": "error"}
+    
+    try:
+        # Update the status to Resolved
+        feedback_collection.update_one({"_id": ObjectId(log_id)}, {"$set": {"status": "Resolved"}})
+        return {"status": "success", "message": "Marked as resolved."}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+# --- ENDPOINT 7: Faculty Fetch Own History ---
+@app.get("/api/feedback/{user_id}")
+async def get_user_feedback(user_id: str):
+    if feedback_collection is None:
+        return {"status": "error"}
+    
+    try:
+        # Fetch only the logs belonging to this specific user
+        cursor = feedback_collection.find({"user_id": user_id}).sort("timestamp", -1)
+        logs = []
+        for doc in cursor:
+            doc["_id"] = str(doc["_id"])
+            logs.append(doc)
+        return {"status": "success", "data": logs}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}

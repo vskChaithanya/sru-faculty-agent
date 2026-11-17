@@ -14,6 +14,10 @@
         .badge-down { background-color: #b91c1c; color: white; padding: 5px 10px; border-radius: 12px; font-size: 12px; }
         .btn-delete { background-color: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer; }
         .btn-delete:hover { background-color: #c82333; }
+        .btn-resolve { background-color: #28a745; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer; margin-bottom: 5px; }
+        .btn-resolve:hover { background-color: #218838; }
+        .status-resolved { color: #15803d; font-weight: bold; }
+        .status-pending { color: #d97706; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -36,12 +40,13 @@
                             <th>Question Asked</th>
                             <th>Rating</th>
                             <th>User Suggestion</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="feedback-table-body">
                         <tr>
-                            <td colspan="6" class="text-center text-muted">Loading feedback logs from secure database...</td>
+                            <td colspan="7" class="text-center text-muted">Loading feedback logs from secure database...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -55,7 +60,7 @@
 
         async function fetchFeedback() {
             const tableBody = document.getElementById("feedback-table-body");
-            tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">Loading...</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">Loading...</td></tr>`;
             
             try {
                 const response = await fetch("https://sru-faculty-agent.onrender.com/api/admin/feedback");
@@ -72,7 +77,15 @@
                             : `<span class="badge-down">👎 Needs Work</span>`;
                         const suggestionText = log.suggestion ? log.suggestion : "<i class='text-muted'>No written suggestion</i>";
 
-                        // Note: log._id is passed into the deleteFeedback function
+                        const currentStatus = log.status || "Pending";
+                        const statusBadge = currentStatus === "Resolved" 
+                            ? `<span class="status-resolved">✅ Resolved</span>` 
+                            : `<span class="status-pending">⏳ Pending</span>`;
+
+                        const resolveBtn = currentStatus !== "Resolved" 
+                            ? `<button class="btn-resolve w-100" onclick="resolveFeedback('${log._id}')">✅ Resolve</button>` 
+                            : ``;
+
                         const row = `
                             <tr>
                                 <td style="font-size: 12px; white-space: nowrap;">${formattedDate}</td>
@@ -80,18 +93,36 @@
                                 <td style="font-size: 14px;">${log.question}</td>
                                 <td>${ratingBadge}</td>
                                 <td style="font-size: 14px; color: #b91c1c;">${suggestionText}</td>
+                                <td>${statusBadge}</td>
                                 <td>
-                                    <button class="btn-delete" onclick="deleteFeedback('${log._id}')">🗑️ Delete</button>
+                                    ${resolveBtn}
+                                    <button class="btn-delete w-100" onclick="deleteFeedback('${log._id}')">🗑️ Delete</button>
                                 </td>
                             </tr>
                         `;
                         tableBody.innerHTML += row;
                     });
                 } else {
-                    tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">No feedback logs found.</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No feedback logs found.</td></tr>`;
                 }
             } catch (error) {
-                tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger"><b>Error connecting to Server.</b></td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="7" class="text-center text-danger"><b>Error connecting to Server.</b></td></tr>`;
+            }
+        }
+
+        async function resolveFeedback(logId) {
+            try {
+                const response = await fetch(`https://sru-faculty-agent.onrender.com/api/admin/feedback/${logId}/resolve`, {
+                    method: "PUT"
+                });
+                const result = await response.json();
+                if (result.status === "success") {
+                    fetchFeedback(); 
+                } else {
+                    alert("Error updating status.");
+                }
+            } catch (error) {
+                alert("Failed to connect to the server.");
             }
         }
 

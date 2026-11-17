@@ -75,7 +75,7 @@
                 <a href="#">Course Reg. +</a>
                 <a href="#">Attendance +</a>
                 <a href="#">Results +</a>
-                <a href="#">Feedback +</a>
+                <a href="#" onclick="showMyFeedbackHistory(); return false;" style="color: #ffc107;">Feedback History</a>
                 <a href="#">Exams +</a>
                 <a href="#">Grievance +</a>
                 <a href="#">University Clubs</a>
@@ -197,6 +197,29 @@
         </div>
     </div>
 
+    <!-- FACULTY FEEDBACK HISTORY OVERLAY -->
+    <div id="feedback-history-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:10000; justify-content:center; align-items:center;">
+        <div style="background:white; width:80%; max-width:700px; border-radius:8px; padding:20px; max-height:80vh; overflow-y:auto; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="m-0" style="color:#113264;">My Feedback & Support Tickets</h4>
+                <button onclick="document.getElementById('feedback-history-modal').style.display='none'" style="border:none; background:none; font-size:20px; cursor:pointer;">✖</button>
+            </div>
+            <table class="table table-bordered table-striped" style="font-size:12px;">
+                <thead style="background:#113264; color:white;">
+                    <tr>
+                        <th>Date</th>
+                        <th>Chatbot Question</th>
+                        <th>My Suggestion</th>
+                        <th>Admin Status</th>
+                    </tr>
+                </thead>
+                <tbody id="my-feedback-list">
+                    <tr><td colspan="4" class="text-center text-muted">Loading your history...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <!-- CHATBOT WIDGET START -->
     <div id="sru-chatbot" style="display:none; position:fixed; bottom:80px; right:20px; width:350px; height:500px; background:white; border-radius:10px; box-shadow:0px 5px 15px rgba(0,0,0,0.2); z-index:9999; display:flex; flex-direction:column; overflow:hidden;">
         <div style="background:#1a365d; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center;">
@@ -309,6 +332,39 @@
                     }
                 }
             } catch(error) { console.error("Feedback error:", error); }
+        }
+
+        async function showMyFeedbackHistory() {
+            document.getElementById("feedback-history-modal").style.display = "flex";
+            const tbody = document.getElementById("my-feedback-list");
+            
+            try {
+                const response = await fetch(`https://sru-faculty-agent.onrender.com/api/feedback/${currentUserId}`);
+                const result = await response.json();
+                
+                if (result.status === "success" && result.data.length > 0) {
+                    tbody.innerHTML = "";
+                    result.data.forEach(log => {
+                        const dateObj = new Date(log.timestamp);
+                        const statusBadge = (log.status || "Pending") === "Resolved" 
+                            ? `<span style="color:green; font-weight:bold;">✅ Resolved</span>` 
+                            : `<span style="color:#d97706; font-weight:bold;">⏳ Pending</span>`;
+                            
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${dateObj.toLocaleDateString()}</td>
+                                <td>${log.question}</td>
+                                <td style="color:#b91c1c;">${log.suggestion || "N/A"}</td>
+                                <td>${statusBadge}</td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">You haven't submitted any feedback yet.</td></tr>`;
+                }
+            } catch (error) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">Error loading history.</td></tr>`;
+            }
         }
     </script>
 </body>
